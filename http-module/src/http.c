@@ -26,118 +26,28 @@ SOFTWARE.
 #include <stdio.h>
 #include <tchar.h>
 
-/**
- * WinHTTP API Functions
- */
-WINBASEAPI HINTERNET WINAPI WINHTTP$WinHttpOpen(
-    LPCWSTR pszAgentW,
-    DWORD dwAccessType,
-    LPCWSTR pszProxyW,
-    LPCWSTR pszProxyBypassW,
-    DWORD dwFlags
-);
+DECLSPEC_IMPORT HINTERNET WINAPI WINHTTP$WinHttpOpen               ( LPCWSTR, DWORD, LPCWSTR, LPCWSTR, DWORD );
+DECLSPEC_IMPORT BOOL      WINAPI WINHTTP$WinHttpSetOption          ( HINTERNET, DWORD, LPVOID, DWORD );
+DECLSPEC_IMPORT HINTERNET WINAPI WINHTTP$WinHttpConnect            ( HINTERNET, LPCWSTR, INTERNET_PORT, DWORD );
+DECLSPEC_IMPORT HINTERNET WINAPI WINHTTP$WinHttpOpenRequest        ( HINTERNET, LPCWSTR, LPCWSTR, LPCWSTR, LPCWSTR, LPCWSTR *, DWORD );
+DECLSPEC_IMPORT BOOL      WINAPI WINHTTP$WinHttpSendRequest        ( HINTERNET, LPCWSTR, DWORD, LPVOID, DWORD, DWORD, DWORD_PTR );
+DECLSPEC_IMPORT BOOL      WINAPI WINHTTP$WinHttpReceiveResponse    ( HINTERNET, LPVOID );
+DECLSPEC_IMPORT BOOL      WINAPI WINHTTP$WinHttpQueryHeaders       ( HINTERNET, DWORD, LPCWSTR, LPVOID, LPDWORD, LPDWORD );
+DECLSPEC_IMPORT BOOL      WINAPI WINHTTP$WinHttpQueryDataAvailable ( HINTERNET, LPDWORD );
+DECLSPEC_IMPORT BOOL      WINAPI WINHTTP$WinHttpReadData           ( HINTERNET, LPVOID, DWORD, LPDWORD );
+DECLSPEC_IMPORT BOOL      WINAPI WINHTTP$WinHttpCloseHandle        ( HINTERNET );
+DECLSPEC_IMPORT int       WINAPI KERNELBASE$MultiByteToWideChar    ( UINT, DWORD, LPCCH, int, LPWSTR, int );
+DECLSPEC_IMPORT int       WINAPI KERNELBASE$WideCharToMultiByte    ( UINT, DWORD, LPCWCH, int, LPSTR, int, LPCCH, LPBOOL );
 
-WINBASEAPI BOOL WINAPI WINHTTP$WinHttpSetOption(
-    HINTERNET hInternet,
-    DWORD dwOption,
-    LPVOID lpBuffer,
-    DWORD dwBufferLength
-);
-
-WINBASEAPI HINTERNET WINAPI WINHTTP$WinHttpConnect(
-    HINTERNET hSession,
-    LPCWSTR pswzServerName,
-    INTERNET_PORT nServerPort,
-    DWORD dwReserved
-);
-
-WINBASEAPI HINTERNET WINAPI WINHTTP$WinHttpOpenRequest(
-    HINTERNET hConnect,
-    LPCWSTR pwszVerb,
-    LPCWSTR pwszObjectName,
-    LPCWSTR pwszVersion,
-    LPCWSTR pwszReferrer,
-    LPCWSTR *ppwszAcceptTypes,
-    DWORD dwFlags
-);
-
-WINBASEAPI BOOL WINAPI WINHTTP$WinHttpSendRequest(
-    HINTERNET hRequest,
-    LPCWSTR lpszHeaders,
-    DWORD dwHeadersLength,
-    LPVOID lpOptional,
-    DWORD dwOptionalLength,
-    DWORD dwTotalLength,
-    DWORD_PTR dwContext
-);
-
-WINBASEAPI BOOL WINAPI WINHTTP$WinHttpReceiveResponse(
-    HINTERNET hRequest,
-    LPVOID lpReserved
-);
-
-WINBASEAPI BOOL WINAPI WINHTTP$WinHttpQueryHeaders(
-    HINTERNET hRequest,
-    DWORD dwInfoLevel,
-    LPCWSTR pwszName,
-    LPVOID lpBuffer,
-    LPDWORD lpdwBufferLength,
-    LPDWORD lpdwIndex
-);
-
-WINBASEAPI BOOL WINAPI WINHTTP$WinHttpQueryDataAvailable(
-    HINTERNET hRequest,
-    LPDWORD lpdwNumberOfBytesAvailable
-);
-
-WINBASEAPI BOOL WINAPI WINHTTP$WinHttpReadData(
-    HINTERNET hRequest,
-    LPVOID lpBuffer,
-    DWORD dwNumberOfBytesToRead,
-    LPDWORD lpdwNumberOfBytesRead
-);
-
-WINBASEAPI BOOL WINAPI WINHTTP$WinHttpCloseHandle(
-    HINTERNET hInternet
-);
-
-WINBASEAPI void* WINAPI MSVCRT$malloc(SIZE_T);
-
-WINBASEAPI void MSVCRT$memset(void *s, int c, size_t n);
-
-WINBASEAPI errno_t MSVCRT$strcpy_s(char *strDestination, size_t numberOfElements, const char *strSource);
-
-WINBASEAPI size_t MSVCRT$strlen(const char *str);
-
-WINBASEAPI int MSVCRT$strcmp(const char *s1, const char *s2);
-
-WINBASEAPI void MSVCRT$free(void *ptr);
-
-WINBASEAPI void* MSVCRT$realloc(void *ptr, size_t size);
-
-WINBASEAPI int MSVCRT$_snwprintf_s(wchar_t *buffer, size_t sizeOfBuffer, size_t count, const wchar_t *format, ...);
-
-WINBASEAPI size_t MSVCRT$wcslen(const wchar_t *str);
-
-WINBASEAPI int KERNELBASE$MultiByteToWideChar(
-    UINT CodePage,
-    DWORD dwFlags,
-    LPCCH lpMultiByteStr,
-    int cbMultiByte,
-    LPWSTR lpWideCharStr,
-    int cchWideChar
-);
-
-WINBASEAPI int KERNELBASE$WideCharToMultiByte(
-    UINT CodePage,
-    DWORD dwFlags,
-    LPCWCH lpWideCharStr,
-    int cchWideChar,
-    LPSTR lpMultiByteStr,
-    int cbMultiByte,
-    LPCCH lpDefaultChar,
-    LPBOOL lpUsedDefaultChar
-);
+DECLSPEC_IMPORT void *  WINAPIV MSVCRT$malloc       ( size_t );
+DECLSPEC_IMPORT void    WINAPIV MSVCRT$memset       ( void *, int, size_t );
+DECLSPEC_IMPORT errno_t WINAPIV MSVCRT$strcpy_s     ( char *, size_t, const char * );
+DECLSPEC_IMPORT size_t  WINAPIV MSVCRT$strlen       ( const char * );
+DECLSPEC_IMPORT int     WINAPIV MSVCRT$strcmp       ( const char *, const char * );
+DECLSPEC_IMPORT void    WINAPIV MSVCRT$free         ( void * );
+DECLSPEC_IMPORT void*   WINAPIV MSVCRT$realloc      ( void *, size_t );
+DECLSPEC_IMPORT int     WINAPIV MSVCRT$_snwprintf_s ( wchar_t *, size_t, size_t, const wchar_t *, ... );
+DECLSPEC_IMPORT size_t  WINAPIV MSVCRT$wcslen       ( const wchar_t * );
 
 /* ============================================================================
  * Internal Function Declarations
